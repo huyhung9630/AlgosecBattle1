@@ -32,13 +32,13 @@ string infix(string s)
             if(temp!="") res=res+" "+temp;
             temp="";
             if(s[i]=='(') st.push(s[i]);
-            else 
+            else
                 if(s[i]==')')
                 {
                     while(!st.empty()&&st.top()!='(') {res=res+" "+st.top(); st.pop();}
                     st.pop();
                 }
-                else 
+                else
                 {
                     while(!st.empty()&&priority(st.top())>=priority(s[i]))
                         {
@@ -47,7 +47,7 @@ string infix(string s)
                         }
                     st.push(s[i]);
                 }
-        }  
+        }
     }
     if(temp!="") res=res+" "+temp;
     while(!st.empty()) res=res+" "+st.top(),st.pop();
@@ -77,29 +77,40 @@ void count(string s)
     {
         if(isnum(s[i])) temp+=s[i];
         else
-        if(s[i]!=' ')
-        {
-            cout<<temp<<' ';
-            if(temp!="") st.push(temp);
-            temp="";
-            long long num1=convert_num(st.top());
-            st.pop();
-            long long num2=convert_num(st.top());
-            st.pop();
-            if(s[i]=='*') st.push(convert_string(num1*num2));
-            if(s[i]=='+') st.push(convert_string(num1+num2));
-            if(s[i]=='-') st.push(convert_string(num1-num2));
-        }
+            if(s[i]!=' ')
+            {
+                //cout<<temp<<' ';
+                if(temp!="") st.push(temp);
+                    temp="";
+                if(st.size()<2) continue;
+                long long num1=convert_num(st.top());
+                st.pop();
+                long long num2=convert_num(st.top());
+                st.pop();
+                //cout<<num1<<' '<<num2<<'\n';
+                if(s[i]=='*') st.push(convert_string(num1*num2));
+                if(s[i]=='+') st.push(convert_string(num1+num2));
+                if(s[i]=='-') st.push(convert_string(abs(num1-num2)));
+            }
+            else
+            {
+                //cout<<temp<<' ';
+                if(temp!="") st.push(temp);
+                temp="";
+            }
     }
-    while(!s.empty()) {cout<<st.top()<<' '; st.pop();}
+    while(!st.empty()) {cout<<st.top()<<' '; st.pop();}
 }
 int main()
 {
+    //freopen("nhap.inp","r",stdin);
+    //freopen("nhap.out","w",stdout);
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cin>>s;
+    //s="(5+9)*6";
     //cout<<convert_num("123")<<' '<<convert_string(123)<<'\n';
-    //cout<<infix(s)<<'\n';
+    //cout<<infix(s)<<' '<<isnum(' ')<<'\n';
     count(infix(s));
     return 0;
 }
